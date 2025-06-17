@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 import ProductList from "../components/ProductList";
+import Loading from "../components/Loading";
+import requests from "../api/apiClient";
 
 export default function ProductsPage() {
   
@@ -9,8 +11,7 @@ export default function ProductsPage() {
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const response = await fetch("http://localhost:5000/products/");
-        const data = await response.json();
+        const data = await requests.products.list();
         setLoadedProducts(data);
       } 
       catch (error) {
@@ -26,8 +27,9 @@ export default function ProductsPage() {
 
 
   if (loading) {
+
     return (
-      <h1>Loading...</h1>
+      <Loading message="Ürün listesi yükleniyor..." />
     )
   }
 
