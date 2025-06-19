@@ -1,30 +1,13 @@
-import { useEffect, useState } from "react"
-import requests from "../api/apiClient"
 import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { currencyTRY } from "../utils/formats";
 import { Delete } from "@mui/icons-material";
-import Loading from "../components/Loading";
+import { useCartContext } from "../context/CartContext";
 
 export default function CartPage() {
 
-  const [cart, setCart] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { cart } = useCartContext();
 
-  useEffect(() => {
-    requests.cart.get()
-      .then((cart) => setCart(cart))
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) {
-    
-    return (
-      <Loading message="Yükleniyor..."/>
-    )
-  }
-
-  if (!cart) {
+  if (!cart || cart.cartItems.length === 0) {
 
     return (
       <Typography component="h4">Sepetinizde Ürün Yok</Typography>
