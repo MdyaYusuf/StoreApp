@@ -7,7 +7,7 @@ export default function ErrorPage() {
   const [validationError, setValidationError] = useState({});
 
   function getValidationErrors() {
-    requests.errors.get403Error().catch(data => {
+    requests.errors.get403Error().catch((data) => {
       setValidationError(data);
     });
   }
@@ -28,7 +28,7 @@ export default function ErrorPage() {
       )}
       <Button sx={{ mr:2 }} variant="outlined" color="error" onClick={() => requests.errors.get400Error()}>Bad Request</Button>
       <Button sx={{ mr:2 }} variant="outlined" color="error" onClick={() => requests.errors.get401Error()}>Unauthorized</Button>
-      <Button sx={{ mr:2 }} variant="outlined" color="error" onClick={getValidationErrors()}>Validation Error</Button>
+      <Button sx={{ mr:2 }} variant="outlined" color="error" onClick={getValidationErrors}>Validation Error</Button>
       <Button sx={{ mr:2 }} variant="outlined" color="error" onClick={() => requests.errors.get404Error()}>Not Found Error</Button>
       <Button sx={{ mr:2 }} variant="outlined" color="error" onClick={() => requests.errors.get500Error()}>Server Error</Button>
     </Box>
