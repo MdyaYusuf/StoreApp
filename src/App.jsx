@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router"
 import MainLayout from "./layout/MainLayout"
 import HomePage from "./pages/HomePage"
 import ProductsPage from "./pages/ProductsPage"
-import CartPage from "./pages/CartPage"
+import CartPage from "./pages/cart/CartPage"
 import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
 import ProductDetailsPage from "./pages/ProductDetailsPage"
@@ -11,7 +11,8 @@ import ServerErrorPage from "./pages/errors/ServerError"
 import NotFoundPage from "./pages/errors/NotFoundPage"
 import { useEffect } from "react"
 import requests from "./api/apiClient"
-import { useCartContext } from "./context/CartContext"
+import { useDispatch } from "react-redux"
+import { setCart } from "./pages/cart/cartSlice"
 
 export const router = createBrowserRouter([
   { 
@@ -44,11 +45,11 @@ export const router = createBrowserRouter([
 
 function App() {
 
-  const { setCart } = useCartContext();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     requests.cart.get()
-      .then(cart => setCart(cart))
+      .then((cart) => dispatch(setCart(cart)))
       .catch(error => console.log(error));
   }, []);
     

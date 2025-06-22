@@ -1,15 +1,15 @@
 import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, CircularProgress, IconButton, Typography } from "@mui/material";
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Link } from "react-router";
 import { currencyTRY } from "../utils/formats";
 import requests from "../api/apiClient";
-import { useCartContext } from "../context/CartContext";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setCart } from "../pages/cart/cartSlice";
 
 export default function ProductCard({ product }) {
 
-  const { setCart } = useCartContext();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
   function handleAddItem(productId) {
@@ -17,7 +17,7 @@ export default function ProductCard({ product }) {
     setLoading(true);
 
     requests.cart.addItem(productId)
-      .then(cart => setCart(cart))
+      .then(cart => dispatch(setCart(cart)))
       .catch(error => console.log(error))
       .finally(() => setLoading(false));
   }
