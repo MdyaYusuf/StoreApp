@@ -2,25 +2,13 @@ import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Circ
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Link } from "react-router";
 import { currencyTRY } from "../utils/formats";
-import requests from "../api/apiClient";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { setCart } from "../pages/cart/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addItemToCart } from "../pages/cart/cartSlice";
 
 export default function ProductCard({ product }) {
 
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
-
-  function handleAddItem(productId) {
-
-    setLoading(true);
-
-    requests.cart.addItem(productId)
-      .then(cart => dispatch(setCart(cart)))
-      .catch(error => console.log(error))
-      .finally(() => setLoading(false));
-  }
+  const { status } = useSelector((state) => state.cart);
 
   return (
     <Card>
@@ -35,12 +23,12 @@ export default function ProductCard({ product }) {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions sx={{ display:"flex", justifyContent: "space-betweeen" }}>
+      <CardActions sx={{ display: "flex", justifyContent: "space-betweeen" }}>
         <IconButton>
           <FavoriteBorderIcon />
         </IconButton>
-        <Button onClick={() => handleAddItem(product.id)}>
-          {loading ? <CircularProgress size="20px" /> : "Sepete Ekle"}
+        <Button onClick={() => dispatch(addItemToCart({ productId: product.id }))}>
+          {status === "pendingAddItem" + product.id ? <CircularProgress size="20px" /> : "Sepete Ekle"}
         </Button>
       </CardActions>
     </Card>
