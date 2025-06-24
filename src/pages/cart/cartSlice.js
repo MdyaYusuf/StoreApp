@@ -6,30 +6,6 @@ const initialState = {
   status: "idle"
 };
 
-export const addItemToCart = createAsyncThunk(
-  "cart/addItemToCart",
-  async ({ productId, quantity = 1 }) => {
-    try {
-      return await requests.cart.addItem(productId, quantity);
-    }
-    catch (error) {
-      console.log(error);
-    }
-  }
-);
-
-export const deleteItemFromCart = createAsyncThunk(
-  "cart/deleteItemFromCart",
-  async ({ productId, quantity = 1, key = "" }) => {
-    try {
-      return await requests.cart.deleteItem(productId, quantity);
-    }
-    catch (error) {
-      console.log(error);
-    }
-  }
-);
-
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
@@ -66,5 +42,29 @@ export const cartSlice = createSlice({
     });
   }
 });
+
+export const addItemToCart = createAsyncThunk(
+  "cart/addItemToCart",
+  async ({ productId, quantity = 1 }) => {
+    try {
+      return await requests.cart.addItem(productId, quantity);
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const deleteItemFromCart = createAsyncThunk(
+  "cart/deleteItemFromCart",
+  async ({ productId, quantity = 1, key = "" }) => {
+    try {
+      return await requests.cart.deleteItem(productId, quantity);
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+);
 
 export const { setCart } = cartSlice.actions;

@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router";
 import ProductItem from "../components/ProductItem";
 import Loading from "../components/Loading";
-import requests from "../api/apiClient";
 import { useDispatch, useSelector } from "react-redux";
 import { addItemToCart } from "./cart/cartSlice";
+import { fetchProductById, selectProductById } from "./catalog/catalogSlice";
 
 export default function ProductDetailsPage() {
 
   const { id } = useParams();
-  const [loading, setLoading] = useState(true);
-  const [product, setProduct] = useState(null);
   const { cart, status } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const product = useSelector((state) => selectProductById(state, id));
+  const { status: loading } = useSelector((state) => state.catalog);
 
 
   const cartItem = cart?.cartItems.find((i) => i.product.productId == product?.id);
@@ -22,23 +22,12 @@ export default function ProductDetailsPage() {
   }
 
   useEffect(() => {
-    async function fetchProductDetails() {
-      try {
-        const data = await requests.products.details(id);
-        setProduct(data);
-      }
-      catch (error) {
-        console.log(error);
-      }
-      finally {
-        setLoading(false);
-      }
+    if (!product && id) {
+      dispatch(fetchProductById(id))
     }
-
-    fetchProductDetails();
   }, [id]);
 
-  if (loading) {
+  if (loading === "pendingFetchProductById") {
 
     return (
       <Loading message="Ürün yükleniyor..." />
