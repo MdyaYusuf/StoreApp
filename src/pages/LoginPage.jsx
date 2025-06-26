@@ -1,6 +1,7 @@
 import { LockOutlined } from "@mui/icons-material";
 import { Avatar, Box, Button, Container, Paper, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 
 export default function LoginPage() {
 
@@ -11,10 +12,16 @@ export default function LoginPage() {
     }
   });
 
+  const navigate = useNavigate();
+
   function handleForm(data) {
-    requests.account.register(data)
-      .then((result) => console.log(result))
-      .catch((error) => console.log(error))
+    requests.account.login(data)
+      .then((result) => {
+        console.log(result);
+        localStorage.setItem("user", JSON.stringify(result));
+        navigate("/");
+      })
+      .catch((error) => console.log(error));
   }
 
   return (
