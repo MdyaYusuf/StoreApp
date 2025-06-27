@@ -6,6 +6,42 @@ const initialState = {
   status: "idle"
 };
 
+export const addItemToCart = createAsyncThunk(
+  "cart/addItemToCart",
+  async ({ productId, quantity = 1 }) => {
+    try {
+      return await requests.cart.addItem(productId, quantity);
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const deleteItemFromCart = createAsyncThunk(
+  "cart/deleteItemFromCart",
+  async ({ productId, quantity = 1, key = "" }) => {
+    try {
+      return await requests.cart.deleteItem(productId, quantity);
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const getCart = createAsyncThunk(
+  "cart/getCart",
+  async (_, thunkAPI) => {
+    try {
+      return await requests.cart.get();
+    }
+    catch (error) {
+      return thunkAPI.rejectWithValue({ error: error.data });
+    }
+  }
+);
+
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
@@ -14,7 +50,7 @@ export const cartSlice = createSlice({
       state.cart = action.payload;
     }
   },
-  extraReducers: (builder) => {
+  extraReducers: (builder) => {   
     builder.addCase(addItemToCart.pending, (state, action) => {
       state.status = "pendingAddItem" + action.meta.arg.productId;
     });
@@ -40,31 +76,11 @@ export const cartSlice = createSlice({
     builder.addCase(deleteItemFromCart.rejected, (state) => {
       state.status = "idle";
     });
+
+    builder.addCase(getCart.fulfilled, (state, action) => {
+      state.cart = action.payload;
+    }); 
   }
 });
-
-export const addItemToCart = createAsyncThunk(
-  "cart/addItemToCart",
-  async ({ productId, quantity = 1 }) => {
-    try {
-      return await requests.cart.addItem(productId, quantity);
-    }
-    catch (error) {
-      console.log(error);
-    }
-  }
-);
-
-export const deleteItemFromCart = createAsyncThunk(
-  "cart/deleteItemFromCart",
-  async ({ productId, quantity = 1, key = "" }) => {
-    try {
-      return await requests.cart.deleteItem(productId, quantity);
-    }
-    catch (error) {
-      console.log(error);
-    }
-  }
-);
 
 export const { setCart } = cartSlice.actions;

@@ -8,6 +8,30 @@ const initialState = productsAdapter.getInitialState({
   isLoaded: false
 });
 
+export const fetchProducts = createAsyncThunk(
+  "catalog/fetchProducts",
+  async () => {
+    try {
+      return await requests.products.list()
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const fetchProductById = createAsyncThunk(
+  "catalog/fetchProductById",
+  async ({ productId }) => {
+    try {
+      return await requests.products.details(productId);
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 export const catalogSlice = createSlice({
   name: "catalog",
   initialState,
@@ -42,31 +66,7 @@ export const catalogSlice = createSlice({
       state.status = "idle";
     });
   }
-})
-
-export const fetchProducts = createAsyncThunk(
-  "catalog/fetchProducts",
-  async () => {
-    try {
-      return await requests.products.list()
-    }
-    catch (error) {
-      console.log(error);
-    }
-  }
-);
-
-export const fetchProductById = createAsyncThunk(
-  "catalog/fetchProductById",
-  async ({ productId }) => {
-    try {
-      return await requests.products.details(productId);
-    }
-    catch (error) {
-      console.log(error);
-    }
-  }
-);
+});
 
 export const {
   selectById: selectProductById,

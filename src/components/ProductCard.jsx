@@ -1,8 +1,8 @@
+import { Link } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, CircularProgress, IconButton, Typography } from "@mui/material";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { Link } from "react-router";
 import { currencyTRY } from "../utils/formats";
-import { useDispatch, useSelector } from "react-redux";
 import { addItemToCart } from "../pages/cart/cartSlice";
 
 export default function ProductCard({ product }) {

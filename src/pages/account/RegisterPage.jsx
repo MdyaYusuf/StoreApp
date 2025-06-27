@@ -1,12 +1,13 @@
 import { LockOutlined } from "@mui/icons-material";
-import { Avatar, Box, Button, Container, Paper, TextField, Typography } from "@mui/material";
+import { Avatar, Box, Button, CircularProgress, Container, Paper, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import requests from "../api/apiClient";
-import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "./accountSlice";
 
 export default function RegisterPage() {
 
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { status } = useSelector((state) => state.account);
 
   const { register, handleSubmit, formState: { errors, isValid } } = useForm({
     defaultValues: {
@@ -17,12 +18,8 @@ export default function RegisterPage() {
   });
 
   function handleForm(data) {
-    requests.account.register(data)
-      .then((result) => {
-        console.log(result);
-        navigate("/login");
-      })
-      .catch((error) => console.log(error));
+    
+    dispatch(registerUser(data));
   }
 
   return (
@@ -88,7 +85,7 @@ export default function RegisterPage() {
             disabled={!isValid}
             sx={{ mt: 1 }}
           >
-            Submit
+            {status === "pending" ? <CircularProgress size="20px" /> : "Submit"}
           </Button>
         </Box>
       </Paper>

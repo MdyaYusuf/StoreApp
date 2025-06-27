@@ -1,8 +1,9 @@
+import { Link, NavLink } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
 import { AppBar, Badge, Box, Button, IconButton, Toolbar } from "@mui/material";
 import StoreIcon from '@mui/icons-material/Store';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { Link, NavLink } from "react-router";
-import { useSelector } from "react-redux";
+import { logout } from "../pages/account/accountSlice";
 
 const links = [
   { title: "Home", to: "/" },
@@ -16,8 +17,10 @@ const authLinks = [
 ];
 
 export default function Navbar() {
-  
+
   const { cart } = useSelector((state) => state.cart);
+  const { user } = useSelector((state) => state.account);
+  const dispatch = useDispatch();
   const itemCount = cart?.cartItems.reduce((total, item) => total + item.product.quantity, 0);
 
   return (
@@ -40,9 +43,20 @@ export default function Navbar() {
             </Badge>
           </IconButton>
           {
-            authLinks.map((link) => (
-              <Button key={link.to} component={NavLink} to={link.to} color="inherit">{link.title}</Button>
-            ))
+            user ? (
+              <>
+                <Button color="inherit">{user.username}</Button>
+                <Button color="inherit" onClick={() => dispatch(logout())}>Logout</Button>
+              </>
+            ) : (
+              <>
+                {
+                  authLinks.map((link) => (
+                    <Button key={link.to} component={NavLink} to={link.to} color="inherit">{link.title}</Button>
+                  ))
+                }
+              </>
+            )
           }
         </Box>
       </Toolbar>

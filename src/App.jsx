@@ -1,18 +1,19 @@
+import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
 import { createBrowserRouter, RouterProvider } from "react-router"
-import MainLayout from "./layout/MainLayout"
+import { getUser } from "./pages/account/accountSlice"
+import { getCart } from "./pages/cart/cartSlice"
 import HomePage from "./pages/HomePage"
 import ProductsPage from "./pages/ProductsPage"
-import CartPage from "./pages/cart/CartPage"
-import LoginPage from "./pages/LoginPage"
-import RegisterPage from "./pages/RegisterPage"
 import ProductDetailsPage from "./pages/ProductDetailsPage"
+import CartPage from "./pages/cart/CartPage"
+import LoginPage from "./pages/account/LoginPage"
+import RegisterPage from "./pages/account/RegisterPage"
 import ErrorPage from "./pages/errors/ErrorPage"
 import ServerErrorPage from "./pages/errors/ServerError"
 import NotFoundPage from "./pages/errors/NotFoundPage"
-import { useEffect } from "react"
-import requests from "./api/apiClient"
-import { useDispatch } from "react-redux"
-import { setCart } from "./pages/cart/cartSlice"
+import MainLayout from "./layout/MainLayout"
+import Loading from "./components/Loading"
 
 export const router = createBrowserRouter([
   { 
@@ -41,17 +42,27 @@ export const router = createBrowserRouter([
       { path: "*", element: <NotFoundPage /> }
     ]
   }
-])
+]);
 
 function App() {
 
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
+
+  const initApp = async () => {
+    await dispatch(getUser());
+    await dispatch(getCart());
+  }
 
   useEffect(() => {
-    requests.cart.get()
-      .then((cart) => dispatch(setCart(cart)))
-      .catch(error => console.log(error));
+    initApp().then(() => setLoading(false));
   }, []);
+
+  if (loading) {
+    return (
+      <Loading message="Uygulama başlatılıyor..." />
+    )
+  }
     
   return (
     <RouterProvider router={router} />
