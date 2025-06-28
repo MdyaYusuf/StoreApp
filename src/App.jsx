@@ -14,9 +14,11 @@ import ServerErrorPage from "./pages/errors/ServerError"
 import NotFoundPage from "./pages/errors/NotFoundPage"
 import MainLayout from "./layout/MainLayout"
 import Loading from "./components/Loading"
+import CheckoutPage from "./pages/checkout/Checkout"
+import AuthGuard from "./auth/AuthGuard"
 
 export const router = createBrowserRouter([
-  { 
+  {
     path: "/",
     element: <MainLayout />,
     children: [
@@ -24,14 +26,20 @@ export const router = createBrowserRouter([
       {
         path: "products",
         children: [
-          { index: true, element: <ProductsPage /> }, 
-          { path: ":id", element: <ProductDetailsPage /> } 
+          { index: true, element: <ProductsPage /> },
+          { path: ":id", element: <ProductDetailsPage /> }
         ]
       },
       { path: "cart", element: <CartPage /> },
-      { path: "login", element: <LoginPage /> }, 
-      { path: "register", element: <RegisterPage /> }, 
-      { 
+      { path: "login", element: <LoginPage /> },
+      { path: "register", element: <RegisterPage /> },
+      {
+        element: <AuthGuard />,
+        children: [
+          { path: "checkout", element: <CheckoutPage /> }
+        ]
+      },
+      {
         path: "errors",
         children: [
           { index: true, element: <ErrorPage /> },
@@ -63,7 +71,7 @@ function App() {
       <Loading message="Uygulama başlatılıyor..." />
     )
   }
-    
+
   return (
     <RouterProvider router={router} />
   )
