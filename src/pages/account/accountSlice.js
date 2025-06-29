@@ -27,7 +27,7 @@ export const getUser = createAsyncThunk(
   async (_, thunkAPI) => {
     thunkAPI.dispatch(setUser(JSON.parse(localStorage.getItem("user"))));
     try {
-      const user = requests.account.getUser();
+      const user = await requests.account.getUser();
       localStorage.setItem("user", JSON.stringify(user));
       return user;
     }

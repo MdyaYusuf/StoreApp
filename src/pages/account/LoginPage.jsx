@@ -6,8 +6,8 @@ import { loginUser } from "./accountSlice";
 
 export default function LoginPage() {
 
-  const { status } = useSelector(state => state.account);
   const dispatch = useDispatch();
+  const { status } = useSelector(state => state.account);
 
   const { register, handleSubmit, formState: { errors, isValid } } = useForm({
     defaultValues: {
@@ -18,7 +18,7 @@ export default function LoginPage() {
 
   function handleForm(data) {
 
-    dispatch(loginUser(data))
+    dispatch(loginUser(data));
   }
 
   return (
