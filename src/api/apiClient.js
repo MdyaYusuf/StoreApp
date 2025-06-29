@@ -69,20 +69,26 @@ const errors = {
   get403Error: () => methods.get("errors/validation-error"), 
   get404Error: () => methods.get("errors/not-found").catch((error) => console.log(error)), 
   get500Error: () => methods.get("errors/server-error").catch((error) => console.log(error)) 
-}
+};
 
 const cart = {
   get: () => methods.get("carts"),
   addItem: (productId, quantity = 1) => methods.post(`carts?productId=${productId}&quantity=${quantity}`, {}),
   deleteItem: (productId, quantity = 1) => methods.delete(`carts?productId=${productId}&quantity=${quantity}`)
-}
+};
 
 const account = {
   login: (formData) => methods.post("users/login", formData),
   register: (formData) => methods.post("users/register", formData),
   getUser: () => methods.get("users/getUser")
-}
+};
 
-const requests = { products, errors, cart, account };
+const orders = {
+  getOrders: () => methods.get("orders"),
+  getOrder: (id) => methods.get(`orders/${id}`),
+  createOrder: (formData) => methods.post("orders", formData)
+};
+
+const requests = { products, errors, cart, account, orders };
 
 export default requests;
